@@ -1,4 +1,4 @@
 myOSconfig
 ==========
 
-Configs / settings / tools for an improved OSX / Linux experience
+Configs :: settings :: tools for an improved OSX / Linux experience
