@@ -1,0 +1,22 @@
+# MacPorts
+export PATH=/opt/local/bin:/opt/local/sbin:$PATH
+export MANPATH=/opt/local/share/man:$MANPATH
+ 
+# Couleurs du préfix du terminal
+NM="\[\033[0;38m\]" 
+HI="\[\033[0;37m\]" 
+HII="\[\033[0;36m\]" 
+SI="\[\033[0;33m\]"
+IN="\[\033[0m\]"
+ 
+export PS1="$NM$HI\u@$HII\h:$SI\w$NM$IN\$ "
+
+export CLICOLOR=1
+
+#if [ "$TERM" != "dumb" ]; then
+#    export LS_OPTIONS='--color=auto'
+#    eval `dircolors ~/.dir_colors`
+#fi
+ 
+# Alias
+alias cd..="cd .."
