@@ -16,9 +16,9 @@ git config --global push.default "matching"
 git config --global color.status auto
 git config --global color.branch auto
 git config --global core.editor vim 
+git config --global merge.tool meld
 
 # aliases
-
 git config --global alias.st status
 git config --global alias.br branch
 git config --global alias.co checkout

@@ -1,5 +1,4 @@
 # Start X if tty1
-#[[ -z $DISPLAY ]] && [[ $(tty) = /dev/tty1 ]] && exec startx
 
 # Force inclusion of .profile
 if [ -f ~/.profile ]; then
