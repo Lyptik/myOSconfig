@@ -2,7 +2,7 @@
 
 # configure the user which will be used by git
 # Of course you should use your name
-git config --global user.name "David Chanel"
+git config --global user.name "David-Alexandre Chanel"
 
 # Same for the email address
 git config --global user.email "david.alexandre.chanel.ext@gmail.com" 
@@ -17,6 +17,7 @@ git config --global color.status auto
 git config --global color.branch auto
 git config --global core.editor vim
 mkdir -p ~/.git
+
 case `uname` in
 
   Darwin)
@@ -27,6 +28,10 @@ case `uname` in
         MELD_PATH=/usr/bin/local/meld
         ;;
 esac
+
+# Configure Meld as diff tool
+# Meld can be installed with this : brew install homebrew/x11/meld
+# Meld has XQuartz dependency : 
 echo "#!/usr/bin/python\nimport sys\nimport os\nos.system('$MELD_PATH "%s" "%s"' % (sys.argv[2], sys.argv[5]))" > ~/.git/git-diff.py
 git config --global diff.external ~/.git/git-diff.py
 git config --global merge.tool meld
@@ -39,32 +44,3 @@ git config --global alias.df diff
 git config --global alias.lg log -p
 
 git config --list
-
-## Global .gitignore
-
-# Create a ~/.gitignore in your user directory
-cd ~ &&
-
-# if .gitignore already exists erase it
-[ -f .gitignore ] && rm .gitignore
-
-touch .gitignore &&
-
-# Exclude bin and .metadata directories
-#echo "bin" >> .gitignore
-echo "build" >> .gitignore &&
-echo ".metadata" >> .gitignore &&
-echo ".svn" >> .gitignore &&
-echo ".DS_Store" >> .gitignore &&
-echo "*~" >> .gitignore &&
-echo "*.user" >> .gitignore &&
-echo "*.o" >> .gitignore &&
-echo "*.app" >> .gitignore &&
-echo "*.pyc" >> .gitignore &&
-echo "*.csproj" >> .gitignore &&
-echo "*.pidb" >> .gitignore &&
-echo "*.userprefs" >> .gitignore &&
-
-# Configure Git to use this file
-# as global .gitignore
-git config --global core.excludesfile ~/.gitignore
