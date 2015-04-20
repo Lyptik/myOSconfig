@@ -1,6 +1,14 @@
 #!/bin/sh
 
+# TODO :
+
+# Use mackup to save and sync all your settings
+# Use this for automation : https://gist.github.com/brandonb927/3195465
+# Use cask for more application installed automatically
+
 # Template script explanation
+
+# TODO : Every software can use cask as a software manager good idea ?
 
 # Errors out
 set -e
@@ -37,7 +45,7 @@ read answer
 
 open -a safari https://www.mozilla.org/fr/firefox/new/
 
-echo "Update yout system now !"
+echo "Update your system now !"
 
 echo ""
 echo "y to continue... (y/n)"
@@ -46,14 +54,6 @@ read answer
 [ $answer != "y" ] && { echo "Exiting..."; exit; }
 
 open -a "App Store"
-
-echo "Update your system now !"
-
-echo ""
-echo "y to continue... (y/n)"
-echo ""
-read answer
-[ $answer != "y" ] && { echo "Exiting..."; exit; }
 
 echo "Customize preferences / Finder and the term youre using..."
 
@@ -67,6 +67,9 @@ echo "Customizing your shell with better bash and vim"
 cp shell/bash_profile ~/.bash_profile
 cp shell/vimrc ~/.vimrc
 
+echo "Changing hostname with your computer name put in preferences/sharing"
+sudo hostname -s `scutil --get ComputerName`
+
 echo "Now Installing a real Term !"
 echo ""
 echo "y to continue... (y/n)"
@@ -74,7 +77,7 @@ echo ""
 read answer
 [ $answer != "y" ] && { echo "Exiting..."; exit; }
 
-open -a firefox http://iterm2.com/
+brew cask install iterm2
 
 echo "Installing Brew package manager..."
 echo ""
@@ -83,10 +86,13 @@ echo ""
 read answer
 [ $answer != "y" ] && { echo "Exiting..."; exit; }
 
-ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+# Install home brew
+if test ! $(which brew); then
+  echo "Installing homebrew..."
+  ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+fi
+
 brew update
-## add sbin in path for bash
-#echo 'export PATH="/usr/local/sbin:$PATH"' >> ~/.bash_profile
 brew doctor
 
 echo "Check what the doctor says and fix it..."
@@ -103,6 +109,10 @@ brew install htop git iftop fortune wakeonlan
 # Use htop without sudo
 sudo chown root:wheel /usr/local/bin/htop
 sudo chmod u+s /usr/local/bin/htop
+
+# TODO : do it for iftop
+#sudo chown root:wheel /usr/local/bin/iftop
+#sudo chmod u+s /usr/local/bin/iftop
 
 echo "If you are using dropbox for your data, now is the time to check it up !"
 echo ""
@@ -128,7 +138,7 @@ echo "y to continue... (y/n)"
 echo ""
 read answer
 
-open -a firefox http://flashlight.nateparrott.com/
+brew cask install flashlight
 
 echo "Making a second makeup to your shell experience :)"
 echo "Install go-2-iTerm in your Applications and use it later with spotlight"
@@ -153,24 +163,39 @@ fi
 
 git clone https://github.com/Lyptik/oh-my-zsh.git ~/.oh-my-zsh
 
+echo "Configuring and installing dev tools : git"
+echo ""
+echo "y to continue... (y/n)"
+echo ""
+read answer
+
+brew install sourcetree menumeters
+brew install git cmake
+brew cask install xquartz
+brew install meld
+# Git does setup meld as main diff, so meld should be already installed
+./shell/setupGit.sh
+
 echo "Configuring dev tools"
 echo ""
 echo "y to continue... (y/n)"
 echo ""
 read answer
 
+brew cask install java flash
 
-# Git does setup meld as main diff, so meld should be already installed
-./shell/setupGit.sh
+# TODO
 
-
-sourcetree
+sublime preferences
 xcode monokai
+
+brew cleanup
+brew cask cleanup
+
+brew cask install --appdir="/Applications" iterm2 vlc skype arduino calibre sketchup google-chrome sublime-text3 
 
 ==
 
-telecharger vlc
-skype
 a better file rename
 apple bi baker
 arduino
@@ -190,7 +215,3 @@ augmenta
 canon2Syphon
 z vector
 d light
-
-# For Yosemite opensource monitoring tool
-MenuMeters
-
