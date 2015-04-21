@@ -4,11 +4,6 @@
 
 # Use mackup to save and sync all your settings
 # Use this for automation : https://gist.github.com/brandonb927/3195465
-# Use cask for more application installed automatically
-
-# Template script explanation
-
-# TODO : Every software can use cask as a software manager good idea ?
 
 # Errors out
 set -e
@@ -35,76 +30,63 @@ echo ""
 echo "-----------------------------------------------------------------"
 echo ""
 
-echo "Time to get Firefox..."
+###############################################################################
 
 echo ""
-echo "y to continue... (y/n)"
-echo ""
-read answer
-[ $answer != "y" ] && { echo "Exiting..."; exit; }
+echo "You should update your system now !"
 
-open -a safari https://www.mozilla.org/fr/firefox/new/
-
-echo "Update your system now !"
-
-echo ""
-echo "y to continue... (y/n)"
-echo ""
-read answer
-[ $answer != "y" ] && { echo "Exiting..."; exit; }
+sleep 2 &&
 
 open -a "App Store"
 
-echo "Customize preferences / Finder and the term youre using..."
-
 echo ""
 echo "y to continue... (y/n)"
 echo ""
 read answer
 [ $answer != "y" ] && { echo "Exiting..."; exit; }
 
-echo "Customizing your shell with better bash and vim"
-cp shell/bash_profile ~/.bash_profile
-cp shell/vimrc ~/.vimrc
-
-echo "Changing hostname with your computer name put in preferences/sharing"
-sudo hostname -s `scutil --get ComputerName`
-
-echo "Now Installing a real Term !"
+###############################################################################
+# General UI/UX
+###############################################################################
+ 
 echo ""
-echo "y to continue... (y/n)"
-echo ""
-read answer
-[ $answer != "y" ] && { echo "Exiting..."; exit; }
+echo "Would you like to set your computer name (as done via System Preferences >> Sharing)?  (y/n)"
+read -r response
+if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
+  echo "What would you like it to be?"
+  read COMPUTER_NAME
+  sudo scutil --set ComputerName $COMPUTER_NAME
+  sudo scutil --set HostName $COMPUTER_NAME
+  sudo scutil --set LocalHostName $COMPUTER_NAME
+  sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string $COMPUTER_NAME
+fi
 
-brew cask install iterm2
+###############################################################################
 
 echo "Installing Brew package manager..."
-echo ""
-echo "y to continue... (y/n)"
-echo ""
-read answer
-[ $answer != "y" ] && { echo "Exiting..."; exit; }
-
-# Install home brew
 if test ! $(which brew); then
   echo "Installing homebrew..."
   ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 fi
 
 brew update
-brew doctor
 
-echo "Check what the doctor says and fix it..."
-echo ""
-echo "y to continue... (y/n)"
-echo ""
-read answer
-[ $answer != "y" ] && { echo "Exiting..."; exit; }
+echo "Installing brew packages..."
 
-echo "Installing shell tools"
+apps=(
+  htop
+  git
+  iftop
+  fortune
+  wakeonlan
+  vim
+  zsh
+  git
+  cmake
+  meld
+)
 
-brew install htop git iftop fortune wakeonlan
+brew install ${apps[@]}
 
 # Use htop without sudo
 sudo chown root:wheel /usr/local/bin/htop
@@ -114,43 +96,11 @@ sudo chmod u+s /usr/local/bin/htop
 #sudo chown root:wheel /usr/local/bin/iftop
 #sudo chmod u+s /usr/local/bin/iftop
 
-echo "If you are using dropbox for your data, now is the time to check it up !"
-echo ""
-echo "y to continue... (y/n)"
-echo ""
-read answer
-[ $answer != "y" ] && { echo "Exiting..."; exit; }
-
-open -a firefox www.dropbox.com
-
-echo "Added a lot of quicklook features"
-echo ""
-echo "y to continue... (y/n)"
-echo ""
-read answer
-
-# From here : https://github.com/sindresorhus/quick-look-plugins
-brew cask install qlcolorcode qlstephen qlmarkdown quicklook-json qlprettypatch quicklook-csv betterzipql qlimagesize webpquicklook suspicious-package
-
-echo "Enhancing Spotlight experience with flashlight, don't forget to install cool plugins !"
-echo ""
-echo "y to continue... (y/n)"
-echo ""
-read answer
-
-brew cask install flashlight
-
-echo "Making a second makeup to your shell experience :)"
-echo "Install go-2-iTerm in your Applications and use it later with spotlight"
-echo ""
-echo "y to continue... (y/n)"
-echo ""
-read answer
-
-open -a firefox https://github.com/Lyptik/go-2-iTerm/releases
+echo "Customizing your shell with better bash and vim"
+cp shell/bash_profile ~/.bash_profile
+cp shell/vimrc ~/.vimrc
 
 echo "Installing zsh and oh-my-zsh..."
-
 brew install zsh
 # first copy of a simple zshrc
 cp shell/zshrc ~/.zshrc
@@ -163,52 +113,144 @@ fi
 
 git clone https://github.com/Lyptik/oh-my-zsh.git ~/.oh-my-zsh
 
-echo "Configuring and installing dev tools : git"
+## !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! TODO otherwise zsh not working with ohmyzsh
+
+#TODO -> copy oh my zsh correct template to zshrc
+
+###############################################################################
+
+brew install caskroom/cask/brew-cask
+
+apps=(
+  #alfred
+  dropbox
+  google-chrome
+  firefox
+  #screenflick
+  #slack
+  #transmit
+  appcleaner
+  firefox
+  #hazel
+  #seil
+  #spotify
+  #vagrant
+  #arq
+  iterm2
+  sublime-text3
+  #virtualbox
+  #atom
+  #flux
+  #mailbox
+  #sketch
+  #tower
+  vlc
+  #cloudup
+  #nvalt
+  skype
+  transmission
+  flashlight
+  sourcetree
+  menumeters
+  java
+  flash
+  xquartz
+  arduino
+  calibre
+  sketchup
+  processing
+  filezilla
+  sketchupviewer
+  applepi-baker
+  meshlab
+)
+
+# Install apps to /Applications
+# Default is: /Users/$user/Applications
+echo "Installing apps..."
+brew cask install --appdir="/Applications" ${apps[@]}
+
+###############################################################################
+
+# List from here : https://github.com/sindresorhus/quick-look-plugins
+
+apps=(
+	qlcolorcode
+	qlstephen
+	qlmarkdown
+	quicklook-json
+	qlprettypatch
+	quicklook-csv
+	betterzipql
+	qlimagesize
+	webpquicklook
+	suspicious-package
+)
+
+echo "Installing a lot of quicklook features"
+
+brew cask install ${apps[@]}        
+
+###############################################################################
+
+brew doctor
+
+echo "Check what the doctor says and fix it..."
 echo ""
 echo "y to continue... (y/n)"
 echo ""
 read answer
+[ $answer != "y" ] && { echo "Exiting..."; exit; }
 
-brew install sourcetree menumeters
-brew install git cmake
-brew cask install xquartz
-brew install meld
-# Git does setup meld as main diff, so meld should be already installed
-./shell/setupGit.sh
-
-echo "Configuring dev tools"
-echo ""
-echo "y to continue... (y/n)"
-echo ""
-read answer
-
-brew cask install java flash
-
-# TODO
-
-sublime preferences
-xcode monokai
+###############################################################################
 
 brew cleanup
 brew cask cleanup
 
-brew cask install --appdir="/Applications" iterm2 vlc skype arduino calibre sketchup google-chrome sublime-text3 
+###############################################################################
 
-==
+echo "Configuring git"
+# Git does setup meld as main diff, so meld should be already installed
+./shell/setupGit.sh
+
+###############################################################################
+
+echo "Customize preferences / Finder and the term youre using..."
+
+echo ""
+echo "y to continue... (y/n)"
+echo ""
+read answer
+[ $answer != "y" ] && { echo "Exiting..."; exit; }
+
+###############################################################################
+
+echo "Making a second makeup to your shell experience :)"
+echo "Install go-2-iTerm in your Applications and use it later with spotlight"
+echo ""
+echo "y to continue... (y/n)"
+echo ""
+read answer
+
+open -a firefox https://github.com/Lyptik/go-2-iTerm/releases
+
+###############################################################################
+
+# TODO
+
+sublime preferences (copy settings file)
+xcode monokai (fetch submodule and install it)
+
+# Download apps manually or copy from old install
 
 a better file rename
-apple bi baker
-arduino
-calibre
-
-filezilla 
 eclipse
-sketchup
-meshlab
 millumin
 arena
 modulo
 nmu
+osculator
+osctestapp
 
 // Own tools
 augmenta
