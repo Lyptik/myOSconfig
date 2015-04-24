@@ -84,6 +84,7 @@ apps=(
   git
   cmake
   meld
+  nmap
 )
 
 brew install ${apps[@]}
@@ -163,6 +164,7 @@ apps=(
   sketchupviewer
   applepi-baker
   meshlab
+  cuda
 )
 
 # Install apps to /Applications
@@ -181,7 +183,7 @@ apps=(
 	quicklook-json
 	qlprettypatch
 	quicklook-csv
-	betterzipql
+	#betterzipql # Spotted this dude causing 100% CPU
 	qlimagesize
 	webpquicklook
 	suspicious-package
@@ -257,3 +259,7 @@ augmenta
 canon2Syphon
 z vector
 d light
+pacmanize
+are you my friend
+insult your friend
+
