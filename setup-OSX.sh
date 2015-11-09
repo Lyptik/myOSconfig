@@ -83,7 +83,7 @@ apps=(
   zsh
   git
   cmake
-  meld
+  homebrew/x11/meld
   nmap
 )
 
@@ -123,6 +123,7 @@ git clone https://github.com/Lyptik/oh-my-zsh.git ~/.oh-my-zsh
 brew install caskroom/cask/brew-cask
 
 apps=(
+  unrarx
   #alfred
   dropbox
   google-chrome
@@ -150,7 +151,7 @@ apps=(
   #nvalt
   skype
   transmission
-  flashlight
+  #flashlight
   sourcetree
   menumeters
   java
@@ -165,6 +166,7 @@ apps=(
   applepi-baker
   meshlab
   cuda
+  fritzing
 )
 
 # Install apps to /Applications
@@ -185,8 +187,8 @@ apps=(
 	quicklook-csv
 	#betterzipql # Spotted this dude causing 100% CPU
 	qlimagesize
-	webpquicklook
-	suspicious-package
+	#webpquicklook # wrong link at time of writing
+	#suspicious-package # wrong link at time of writing
 )
 
 echo "Installing a lot of quicklook features"
