@@ -57,6 +57,9 @@ if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
   sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string $COMPUTER_NAME
 fi
 
+echo "Enable not signed application to run on mac (not possible via preferences since Sierra)"
+#sudo spctl --master-disable
+
 ###############################################################################
 # Shell env and tools
 ###############################################################################
@@ -177,7 +180,7 @@ apps=(
   telegram
   resolume-arena
   processing
-  syphon-virtual-screen
+  #syphon-virtual-screen # Does not work currently on Sierra (failed to install)
 )
 
 # Install apps to /Applications
