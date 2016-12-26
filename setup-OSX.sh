@@ -1,10 +1,5 @@
 #!/bin/sh
 
-# TODO :
-
-# Use mackup to save and sync all your settings
-# Use this for automation : https://gist.github.com/brandonb927/3195465
-
 # Errors out
 set -e
 
@@ -34,6 +29,7 @@ echo ""
 
 echo ""
 echo "You should update your system now !"
+echo "Install also Xcode, paid apps, and your App store apps."
 
 sleep 2 &&
 
@@ -62,6 +58,8 @@ if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
 fi
 
 ###############################################################################
+# Shell env and tools
+###############################################################################
 
 echo "Installing Brew package manager..."
 if test ! $(which brew); then
@@ -70,7 +68,7 @@ if test ! $(which brew); then
 fi
 
 brew update
-
+  
 echo "Installing brew packages..."
 
 apps=(
@@ -83,145 +81,113 @@ apps=(
   zsh
   git
   cmake
-  homebrew/x11/meld
   nmap
+  ffmpeg
 )
 
 brew install ${apps[@]}
 
-# Use htop without sudo
-sudo chown root:wheel /usr/local/bin/htop
-sudo chmod u+s /usr/local/bin/htop
-
-# TODO : do it for iftop
-#sudo chown root:wheel /usr/local/bin/iftop
-#sudo chmod u+s /usr/local/bin/iftop
-
 echo "Customizing your shell with better bash and vim"
-cp shell/bash_profile ~/.bash_profile
-cp shell/vimrc ~/.vimrc
+cp $(SCRIPT_PATH)/shell/bash_profile ~/.bash_profile
+cp $(SCRIPT_PATH)/shell/vimrc ~/.vimrc
 
-echo "Installing zsh and oh-my-zsh..."
+echo "Installing zsh"
+
 brew install zsh
 # first copy of a simple zshrc
 cp shell/zshrc ~/.zshrc
-# TODO : TOTEST
 sudo sh -c 'echo $(which zsh) >> /etc/shells'
 if [ "$SHELL" != "$(which zsh)" ]; then
     echo "\033[0;34mTime to change your default shell to zsh!\033[0m"
     chsh -s `which zsh`
 fi
 
-git clone https://github.com/Lyptik/oh-my-zsh.git ~/.oh-my-zsh
-
-## !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! TODO otherwise zsh not working with ohmyzsh
-
-#TODO -> copy oh my zsh correct template to zshrc
+echo "Installing oh-my-zsh..."
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 
 ###############################################################################
+
+#TODO -> copy oh my zsh correct template to zshrc
+echo "Installing quicklook additional features"
+
+# List from here : https://github.com/sindresorhus/quick-look-plugins
+
+apps=(
+  qlcolorcode
+  qlstephen
+  qlmarkdown
+  quicklook-json
+  qlprettypatch
+  quicklook-csv
+  qlimagesize
+)
+
+brew cask install ${apps[@]}
+
+###############################################################################
+
+echo "Installing softwares"
 
 brew install caskroom/cask/brew-cask
 
 apps=(
+  a-better-finder-rename
   unrarx
-  #alfred
+  #alfred # Alfred3 seems to be only on the web
+  clementine
   dropbox
   google-chrome
   firefox
-  #screenflick
-  #slack
-  #transmit
-  appcleaner
-  firefox
-  #hazel
-  #seil
-  #spotify
-  #vagrant
-  #arq
+  #slack # Have it from app store
   iterm2
-  sublime-text3
-  #virtualbox
-  #atom
-  #flux
-  #mailbox
-  #sketch
-  #tower
+  sublime-text
   vlc
-  #cloudup
-  #nvalt
   skype
   transmission
-  #flashlight
+  webtorrent
   sourcetree
-  menumeters
+  #menumeters # Not working with macOS Sierra, try here : https://github.com/yujitach/MenuMeters
   java
-  flash
   xquartz
   arduino
   calibre
   sketchup
   processing
   filezilla
-  sketchupviewer
   applepi-baker
   meshlab
   cuda
   fritzing
+  libreoffice
+  libreoffice-language-pack
+  evernote
+  telegram
+  resolume-arena
+  processing
+  syphon-virtual-screen
 )
 
 # Install apps to /Applications
-# Default is: /Users/$user/Applications
 echo "Installing apps..."
 brew cask install --appdir="/Applications" ${apps[@]}
 
-###############################################################################
+echo "Manually installing softwares..."
 
-# List from here : https://github.com/sindresorhus/quick-look-plugins
-
-apps=(
-	qlcolorcode
-	qlstephen
-	qlmarkdown
-	quicklook-json
-	qlprettypatch
-	quicklook-csv
-	#betterzipql # Spotted this dude causing 100% CPU
-	qlimagesize
-	#webpquicklook # wrong link at time of writing
-	#suspicious-package # wrong link at time of writing
-)
-
-echo "Installing a lot of quicklook features"
-
-brew cask install ${apps[@]}        
-
-###############################################################################
-
-brew doctor
-
-echo "Check what the doctor says and fix it..."
-echo ""
-echo "y to continue... (y/n)"
-echo ""
-read answer
-[ $answer != "y" ] && { echo "Exiting..."; exit; }
+open -a firefox http://millumin.com/
+open -a firefox https://osculator.net/
+# Download osctestapp from here
+open -a firefox https://github.com/mrRay/vvopensource
+open -a firefox http://imimot.com/vezer/
+open -a firefox https://github.com/Lyptik/go-2-iTerm/releases
 
 ###############################################################################
 
 brew cleanup
 brew cask cleanup
 
-###############################################################################
-
-echo "Configuring git"
-# Git does setup meld as main diff, so meld should be already installed
-./shell/setupGit.sh
-
-###############################################################################
-
-echo "Customize preferences / Finder and the term youre using..."
-
+echo "Check what the doctor says and fix it..."
 echo ""
+brew doctor
 echo "y to continue... (y/n)"
 echo ""
 read answer
@@ -229,39 +195,16 @@ read answer
 
 ###############################################################################
 
-echo "Making a second makeup to your shell experience :)"
-echo "Install go-2-iTerm in your Applications and use it later with spotlight"
-echo ""
-echo "y to continue... (y/n)"
-echo ""
-read answer
-
-open -a firefox https://github.com/Lyptik/go-2-iTerm/releases
+echo "Configuring git"
+$(SCRIPT_PATH)/shell/setupGit.sh
 
 ###############################################################################
 
-# TODO
+echo "Installing Xcode theme"
 
-sublime preferences (copy settings file)
-xcode monokai (fetch submodule and install it)
+mkdir -p ~/Library/Developer/Xcode/UserData/FontAndColorThemes/
+cp $(SCRIPT_PATH)/submodules/
 
-# Download apps manually or copy from old install
+###############################################################################
 
-a better file rename
-eclipse
-millumin
-arena
-modulo
-nmu
-osculator
-osctestapp
-
-// Own tools
-augmenta
-canon2Syphon
-z vector
-d light
-pacmanize
-are you my friend
-insult your friend
-
+echo "Done."

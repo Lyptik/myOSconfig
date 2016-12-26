@@ -18,23 +18,23 @@ git config --global color.branch auto
 git config --global core.editor vim
 mkdir -p ~/.git
 
-case `uname` in
+#case `uname` in
 
-  Darwin)
-        MELD_PATH=/usr/local/Cellar/meld/1.8.6/bin/meld
-	;;
+#  Darwin)
+#        MELD_PATH=/usr/local/Cellar/meld/1.8.6/bin/meld
+#	;;
 
-  Linux)
-        MELD_PATH=/usr/bin/local/meld
-        ;;
-esac
+#  Linux)
+#        MELD_PATH=/usr/bin/local/meld
+#        ;;
+#esac
 
 # Configure Meld as diff tool
 # Meld can be installed with this : brew install homebrew/x11/meld
 # Meld has XQuartz dependency : 
-echo "#!/usr/bin/python\nimport sys\nimport os\nos.system('$MELD_PATH "%s" "%s"' % (sys.argv[2], sys.argv[5]))" > ~/.git/git-diff.py
-git config --global diff.external ~/.git/git-diff.py
-git config --global merge.tool meld
+#echo "#!/usr/bin/python\nimport sys\nimport os\nos.system('$MELD_PATH "%s" "%s"' % (sys.argv[2], sys.argv[5]))" > ~/.git/git-diff.py
+#git config --global diff.external ~/.git/git-diff.py
+#git config --global merge.tool meld
 
 # aliases
 git config --global alias.st status
