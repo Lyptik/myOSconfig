@@ -87,11 +87,15 @@ apps=(
 
 brew install ${apps[@]}
 
+###############################################################################
+
 echo "Customizing your shell with better bash and vim"
 cp $(SCRIPT_PATH)/shell/bash_profile ~/.bash_profile
 cp $(SCRIPT_PATH)/shell/vimrc ~/.vimrc
 
-echo "Installing zsh"
+###############################################################################
+
+echo "Installing standard zsh"
 
 brew install zsh
 # first copy of a simple zshrc
@@ -102,12 +106,21 @@ if [ "$SHELL" != "$(which zsh)" ]; then
     chsh -s `which zsh`
 fi
 
+###############################################################################
+
 echo "Installing oh-my-zsh..."
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+echo "Installing custom theme..."
+cp $(SCRIPT_PATH)/shell/lyptik.zsh-theme ~/.oh-my-zsh/themes/
+sed -i -e 's/ZSH_THEME=\"robyrussel\"/ZSH_THEME=\"lyptik\"/' ~/.zshrc
 
 ###############################################################################
 
-#TODO -> copy oh my zsh correct template to zshrc
+echo "Configuring git"
+$(SCRIPT_PATH)/shell/setupGit.sh
+
+###############################################################################
+
 echo "Installing quicklook additional features"
 
 # List from here : https://github.com/sindresorhus/quick-look-plugins
@@ -195,15 +208,17 @@ read answer
 
 ###############################################################################
 
-echo "Configuring git"
-$(SCRIPT_PATH)/shell/setupGit.sh
+echo "Installing Xcode Monokai theme"
+
+mkdir -p ~/Library/Developer/Xcode/UserData/FontAndColorThemes/
+cp $(SCRIPT_PATH)/submodules/xcode-monokai-revisited/Monokai\ Revisited.dvtcolortheme ~/Library/Developer/Xcode/UserData/FontAndColorThemes/
+echo "Theme installed ! You can now launch xcode and change your theme"
+open -a xcode
 
 ###############################################################################
 
-echo "Installing Xcode theme"
-
-mkdir -p ~/Library/Developer/Xcode/UserData/FontAndColorThemes/
-cp $(SCRIPT_PATH)/submodules/
+echo "Configuring sublime preferences"
+cp $(SCRIPT_PATH)/conf/Preferences.sublime-settings ~/Library/Application\ Support/Sublime\ Text\ 3/Packages/User
 
 ###############################################################################
 
