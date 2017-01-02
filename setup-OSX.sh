@@ -149,12 +149,10 @@ brew install caskroom/cask/brew-cask
 apps=(
   a-better-finder-rename
   unrarx
-  #alfred # Alfred3 seems to be only on the web
   clementine
   dropbox
   google-chrome
   firefox
-  #slack # Have it from app store
   iterm2
   sublime-text
   vlc
@@ -162,25 +160,26 @@ apps=(
   transmission
   webtorrent
   sourcetree
-  #menumeters # Not working with macOS Sierra, try here : https://github.com/yujitach/MenuMeters
   java
   xquartz
   arduino
   calibre
   sketchup
-  processing
   filezilla
   applepi-baker
   meshlab
-  cuda
   fritzing
   libreoffice
   libreoffice-language-pack
   evernote
   telegram
-  resolume-arena
   processing
-  #syphon-virtual-screen # Does not work currently on Sierra (failed to install)
+  resolume-arena
+  #alfred # Alfred3 seems to be only on the web
+  #slack # Have it from app store
+  #menumeters # Not working with macOS Sierra, try here : https://github.com/yujitach/MenuMeters
+  #cuda # Check if you have an Nvidia GPU first
+  #syphon-virtual-screen # Discontinued since Yosemite
 )
 
 # Install apps to /Applications
@@ -224,5 +223,13 @@ echo "Configuring sublime preferences"
 cp $(SCRIPT_PATH)/conf/Preferences.sublime-settings ~/Library/Application\ Support/Sublime\ Text\ 3/Packages/User
 
 ###############################################################################
+
+echo "You can install your paid apps now"
+
+# Paragon NTFS 14+ or Tuxera NTFS 2016+
+# Little Snitch
+# Office
+# Adobe
+# Ableton Live
 
 echo "Done."
